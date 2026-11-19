@@ -1,0 +1,137 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '@fontsource-variable/inter';
+@import '@fontsource/rajdhani/600.css';
+@import '@fontsource/rajdhani/700.css';
+
+@source '../../../../app/Filament/Admin/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+:root {
+    --font-family: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-family-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font-family-display: 'Rajdhani', ui-sans-serif, sans-serif;
+}
+
+html.fi {
+    background: #111014;
+    color-scheme: dark;
+}
+
+html.fi .fi-simple-layout {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 84% 16%, rgb(255 48 79 / 0.12), transparent 23rem),
+        linear-gradient(90deg, rgb(244 237 242 / 0.035) 1px, transparent 1px),
+        linear-gradient(rgb(244 237 242 / 0.035) 1px, transparent 1px),
+        #111014;
+    background-size: auto, 4rem 4rem, 4rem 4rem, auto;
+}
+
+html.fi .fi-simple-main-ctn {
+    position: relative;
+}
+
+html.fi .fi-simple-main-ctn::before {
+    color: rgb(244 237 242 / 0.35);
+    content: 'FC / ADMIN';
+    font-family: var(--font-family-mono);
+    font-size: 0.65rem;
+    left: 1.5rem;
+    letter-spacing: 0.18em;
+    position: absolute;
+    top: 1.5rem;
+}
+
+html.fi .fi-simple-page-content {
+    background: linear-gradient(145deg, rgb(41 38 44 / 0.98), rgb(17 16 20 / 0.94));
+    border: 1px solid rgb(244 237 242 / 0.16);
+    box-shadow: 0 2rem 6rem rgb(0 0 0 / 0.32);
+    clip-path: polygon(1.25rem 0, 100% 0, 100% calc(100% - 1.25rem), calc(100% - 1.25rem) 100%, 0 100%, 0 1.25rem);
+    max-width: 32rem;
+    padding: 2.5rem;
+    position: relative;
+}
+
+html.fi .fi-simple-page-content::after {
+    background: #ff304f;
+    content: '';
+    height: 0.25rem;
+    left: 2.5rem;
+    position: absolute;
+    top: 2.5rem;
+    transform: skewX(-24deg);
+    width: 2.2rem;
+}
+
+html.fi .fi-simple-header {
+    padding-top: 1.5rem;
+}
+
+html.fi .fi-simple-header .fi-logo {
+    color: #f4edf2;
+    font-family: var(--font-family-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
+
+html.fi .fi-simple-header-heading {
+    color: #f4edf2;
+    font-family: var(--font-family-display);
+    font-size: 2.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+}
+
+html.fi .fi-simple-header-subheading {
+    color: #d8d3d7;
+}
+
+html.fi .fi-simple-page .fi-input-wrp {
+    background: rgb(17 16 20 / 0.72);
+    border-color: rgb(244 237 242 / 0.16);
+    border-radius: 0;
+    clip-path: polygon(0.45rem 0, 100% 0, 100% calc(100% - 0.45rem), calc(100% - 0.45rem) 100%, 0 100%, 0 0.45rem);
+}
+
+html.fi .fi-simple-page .fi-input-wrp:focus-within {
+    border-color: #ff304f;
+    box-shadow: 0 0 0 1px #ff304f;
+}
+
+html.fi .fi-simple-page .fi-btn {
+    border-radius: 0;
+    clip-path: polygon(0.6rem 0, 100% 0, 100% calc(100% - 0.6rem), calc(100% - 0.6rem) 100%, 0 100%, 0 0.6rem);
+    font-family: var(--font-family-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    transition: transform 180ms ease, filter 180ms ease;
+}
+
+html.fi .fi-simple-page .fi-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+html.fi .fi-simple-page a {
+    color: #ff304f;
+}
+
+@media (max-width: 640px) {
+    html.fi .fi-simple-page-content {
+        margin-inline: 1rem;
+        padding: 2rem 1.25rem;
+    }
+
+    html.fi .fi-simple-main-ctn::before {
+        left: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.fi .fi-simple-page .fi-btn {
+        transition: none;
+    }
+}

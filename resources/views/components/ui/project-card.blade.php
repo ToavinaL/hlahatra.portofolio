@@ -5,12 +5,12 @@
 --}}
 @props(['title', 'summary', 'href', 'image' => null, 'alt' => '', 'technologies' => []])
 
-<article {{ $attributes->class('group relative flex flex-col bg-surface cut [--cut:1.25rem]') }}>
-    <div class="aspect-[16/10] overflow-hidden bg-ink">
+<article {{ $attributes->class('group relative flex flex-col bg-surface cut [--cut:1.25rem] transition-transform duration-500 hover:-translate-y-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0') }}>
+    <div class="relative aspect-[16/10] overflow-hidden bg-ink">
         @if ($image)
             <img src="{{ $image }}" alt="{{ $alt }}" loading="lazy" decoding="async" class="size-full object-cover">
         @else
-            <div aria-hidden="true" class="size-full bg-[repeating-linear-gradient(135deg,transparent_0_10px,rgb(255_48_79/0.1)_10px_11px)]"></div>
+            <div aria-hidden="true" class="size-full bg-[repeating-linear-gradient(135deg,transparent_0_10px,rgb(255_48_79/0.1)_10px_11px)] transition-transform duration-700 group-hover:scale-110"></div>
         @endif
     </div>
 
@@ -31,5 +31,5 @@
     </div>
 
     {{-- Cadre de sélection : inset-3 reste hors de la zone coupée par clip-path --}}
-    <span aria-hidden="true" class="pointer-events-none absolute inset-3 border-2 border-accent opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-has-[a:focus-visible]:opacity-100 motion-reduce:transition-none"></span>
+    <span aria-hidden="true" class="pointer-events-none absolute inset-3 border border-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-has-[a:focus-visible]:opacity-100 motion-reduce:transition-none"></span>
 </article>

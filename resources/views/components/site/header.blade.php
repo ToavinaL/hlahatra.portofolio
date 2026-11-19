@@ -15,15 +15,18 @@
     $linkClasses = 'font-display text-lg font-semibold text-mist transition-colors duration-150 hover:text-bone aria-[current=page]:text-accent motion-reduce:transition-none';
 @endphp
 
-<header class="border-b border-surface">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
-        <a href="{{ route('home') }}" class="font-display text-2xl font-bold">{{ config('app.name') }}</a>
+<header class="sticky top-0 z-40 border-b border-white/10 bg-ink/80 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-10">
+        <a href="{{ route('home') }}" class="group flex items-center gap-3 font-display text-2xl font-bold tracking-tight" aria-label="{{ config('app.name') }} — accueil">
+            <span class="grid size-8 place-items-center bg-accent text-sm text-ink transition-transform duration-300 group-hover:rotate-12">FC</span>
+            <span>{{ config('app.name') }}</span>
+        </a>
 
         <nav aria-label="{{ __('Navigation principale') }}" class="hidden lg:block">
-            <ul class="flex items-center gap-6">
+            <ul class="flex items-center gap-1 rounded-full border border-white/10 bg-surface/40 p-1">
                 @foreach ($items as $name => $label)
                     <li>
-                        <a href="{{ route($name) }}" @if (request()->routeIs(\Illuminate\Support\Str::before($name, '.').'*')) aria-current="page" @endif class="{{ $linkClasses }}">{{ __($label) }}</a>
+                        <a href="{{ route($name) }}" @if (request()->routeIs(\Illuminate\Support\Str::before($name, '.').'*')) aria-current="page" @endif class="rounded-full px-3 py-2 {{ $linkClasses }}">{{ __($label) }}</a>
                     </li>
                 @endforeach
             </ul>

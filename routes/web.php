@@ -9,6 +9,15 @@ if (app()->isLocal()) {
     Route::view('/design-system', 'design-system');
 }
 
+Route::redirect('/{locale}/admin', '/admin')
+    ->where(['locale' => implode('|', config('locales.supported'))]);
+
+Route::redirect('/{locale}/admin/{path}', '/admin/{path}')
+    ->where([
+        'locale' => implode('|', config('locales.supported')),
+        'path' => '.*',
+    ]);
+
 /*
 |--------------------------------------------------------------------------
 | Site public, localisé : /fr/... et /en/...

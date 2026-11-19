@@ -49,9 +49,29 @@
 }
 
 @layer base {
+    :root {
+        --fc-line: rgb(244 237 242 / 0.12);
+        --fc-line-strong: rgb(244 237 242 / 0.22);
+        --fc-glow: rgb(255 48 79 / 0.24);
+    }
+
     html {
+        scroll-behavior: smooth;
         background-color: var(--color-ink);
         color-scheme: dark;
+    }
+
+    body {
+        overflow-x: hidden;
+        background:
+            radial-gradient(circle at 82% 4%, rgb(255 48 79 / 0.11), transparent 24rem),
+            radial-gradient(circle at 12% 42%, rgb(244 237 242 / 0.045), transparent 28rem),
+            var(--color-ink);
+    }
+
+    ::selection {
+        background: var(--color-accent);
+        color: var(--color-ink);
     }
 
     :focus-visible {
@@ -63,5 +83,91 @@
         html {
             scroll-behavior: auto;
         }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
     }
+}
+
+@layer components {
+    .fc-page-grid {
+        background-image: linear-gradient(to right, rgb(244 237 242 / 0.035) 1px, transparent 1px), linear-gradient(to bottom, rgb(244 237 242 / 0.035) 1px, transparent 1px);
+        background-size: 4rem 4rem;
+        mask-image: linear-gradient(to bottom, black 0%, transparent 82%);
+    }
+
+    .fc-kicker {
+        align-items: center;
+        color: var(--color-accent);
+        display: inline-flex;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        gap: 0.65rem;
+        letter-spacing: 0.16em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .fc-kicker::before {
+        background: currentColor;
+        content: '';
+        height: 0.45rem;
+        transform: skewX(-24deg);
+        width: 1.8rem;
+    }
+
+    .fc-rule {
+        background: linear-gradient(90deg, var(--color-accent), transparent);
+        height: 1px;
+        opacity: 0.72;
+    }
+
+    .fc-panel {
+        background: linear-gradient(135deg, rgb(41 38 44 / 0.96), rgb(17 16 20 / 0.82));
+        border: 1px solid var(--fc-line);
+        box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.2);
+    }
+
+    .fc-reveal {
+        animation: fc-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .fc-delay-1 { animation-delay: 120ms; }
+    .fc-delay-2 { animation-delay: 220ms; }
+    .fc-delay-3 { animation-delay: 320ms; }
+
+    .fc-scanline {
+        animation: fc-scanline 5s ease-in-out infinite;
+        background: linear-gradient(90deg, transparent, var(--fc-glow), transparent);
+        height: 1px;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 32%;
+    }
+
+    .fc-float {
+        animation: fc-float 7s ease-in-out infinite;
+    }
+}
+
+@keyframes fc-reveal {
+    from { opacity: 0; transform: translateY(1.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fc-scanline {
+    0%, 100% { opacity: 0; transform: translateY(-6rem); }
+    25%, 70% { opacity: 1; }
+    50% { transform: translateY(20rem); }
+}
+
+@keyframes fc-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-0.45rem); }
 }

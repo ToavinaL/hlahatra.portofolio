@@ -52,6 +52,15 @@ class AdminAccessTest extends TestCase
             ->assertOk();
     }
 
+    public function test_an_administrator_can_open_the_portfolio_resources(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->get('/admin/projets')->assertOk();
+        $this->actingAs($admin)->get('/admin/categories')->assertOk();
+        $this->actingAs($admin)->get('/admin/technologies')->assertOk();
+    }
+
     public function test_admin_pages_are_not_indexable(): void
     {
         $this->get('/admin/login')->assertHeader('X-Robots-Tag', 'noindex, nofollow');

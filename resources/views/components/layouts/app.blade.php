@@ -9,13 +9,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-ink font-sans text-bone antialiased">
+    <div aria-hidden="true" class="fc-page-grid pointer-events-none fixed inset-0 z-0"></div>
     <a href="#contenu" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-accent focus:px-4 focus:py-2 focus:font-display focus:font-bold focus:text-ink">
         {{ __('Aller au contenu') }}
     </a>
 
     {{ $header ?? '' }}
 
-    <main id="contenu">
+    <main id="contenu" class="relative z-10">
         {{ $slot }}
     </main>
 
