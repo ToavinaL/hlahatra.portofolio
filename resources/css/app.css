@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+/* Polices servies localement (installées via npm, aucun CDN) */
+@import '@fontsource/rajdhani/600.css';
+@import '@fontsource/rajdhani/700.css';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+ * Identité FIGHT CODE.
+ * Le rouge est la seule couleur d'accent ; le relief vient des noirs et des blancs.
+ */
+@theme {
+    --color-ink: #111014;
+    --color-surface: #29262c;
+    --color-accent: #ff304f;
+    --color-bone: #f4edf2;
+    --color-mist: #d8d3d7;
+
+    --font-display: 'Rajdhani', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+}
+
+/*
+ * Coins coupés en diagonale (haut gauche et bas droite), comme les tuiles
+ * d'un écran de sélection de personnage. La taille de la coupe se règle
+ * par élément : [--cut:1.25rem].
+ *
+ * Attention : clip-path rogne tout ce qui dépasse, y compris l'outline.
+ * Sur un élément .cut, le focus doit donc être dessiné vers l'intérieur
+ * (outline-offset négatif).
+ */
+@utility cut {
+    --cut: 0.75rem;
+    clip-path: polygon(
+        var(--cut) 0,
+        100% 0,
+        100% calc(100% - var(--cut)),
+        calc(100% - var(--cut)) 100%,
+        0 100%,
+        0 var(--cut)
+    );
+}
+
+@layer base {
+    html {
+        background-color: var(--color-ink);
+        color-scheme: dark;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
