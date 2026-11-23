@@ -8,7 +8,7 @@
     $parameters = $route ? array_intersect_key($route->parameters(), array_flip($route->parameterNames())) : [];
 @endphp
 
-{{-- Garde la page courante : /en/about renvoie vers /fr/about. --}}
+{{-- Garde la page courante quand on change de langue. --}}
 @if ($name && $localized)
     <nav aria-label="{{ __('Langue') }}">
         <ul class="flex gap-1">

@@ -47,15 +47,16 @@ class ExperienceHomepageTest extends TestCase
         $this->assertLessThan(strpos($html, 'Ancienne'), strpos($html, 'Récente'));
     }
 
-    public function test_homepage_displays_the_validated_cv_experiences_from_the_seeder(): void
+    public function test_homepage_displays_experience_titles_without_project_missions(): void
     {
         $this->seed(ExperienceSeeder::class);
 
         $this->get('/fr')
             ->assertOk()
-            ->assertSee('Mortal Kombat Madagascar')
-            ->assertSee('Cleanlyst')
             ->assertSee('A2Mi')
-            ->assertSee('Plateforme de vente aux enchères en ligne');
+            ->assertSee('Développeur Web Fullstack')
+            ->assertSee('Freelance')
+            ->assertSee('Développeur Freelance')
+            ->assertDontSee('Plateforme de vente aux enchères en ligne');
     }
 }

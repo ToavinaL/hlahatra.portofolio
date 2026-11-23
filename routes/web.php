@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Middleware\SetLocale;
 use App\Models\Experience;
 use App\Models\Project;
@@ -26,7 +27,7 @@ Route::redirect('/{locale}/admin/{path}', '/admin/{path}')
 |--------------------------------------------------------------------------
 |
 | Le middleware SetLocale fixe la langue et la valeur par défaut du
-| paramètre {locale}, ce qui permet d'écrire route('about') sans le passer.
+| paramètre {locale}, ce qui permet d'écrire les routes sans le passer.
 | Les pages « stub » seront remplacées une à une par les vraies pages.
 |
 */
@@ -58,10 +59,9 @@ Route::prefix('{locale}')
                     ->get(),
             ]);
         })->name('projects.index');
-        Route::view('/about', 'pages.stub', ['title' => 'À propos'])->name('about');
-        Route::view('/experience', 'pages.stub', ['title' => 'Expérience'])->name('experience');
-        Route::view('/skills', 'pages.stub', ['title' => 'Compétences'])->name('skills');
-        Route::view('/education', 'pages.stub', ['title' => 'Formation'])->name('education');
-        Route::view('/resume', 'pages.stub', ['title' => 'CV'])->name('resume');
-        Route::view('/contact', 'pages.stub', ['title' => 'Contact'])->name('contact');
+        Route::view('/resume', 'pages.resume')->name('resume');
+        Route::get('/contact', [ContactController::class, 'create'])->name('contact');
+        Route::post('/contact', [ContactController::class, 'store'])
+            ->middleware('throttle:5,1')
+            ->name('contact.store');
     });

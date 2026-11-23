@@ -7,13 +7,16 @@
     $imageAlt = $translation?->cover_alt ?: $project->title;
 @endphp
 
-<article {{ $attributes->class('group relative flex flex-col bg-surface cut [--cut:1.25rem]') }}>
+<article {{ $attributes->class('fc-project-card group relative flex flex-col bg-surface cut [--cut:1.25rem] transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_1.5rem_3rem_rgb(0_0_0/0.28)] motion-reduce:transition-none motion-reduce:hover:translate-y-0') }}>
     <div class="relative aspect-[16/10] overflow-hidden bg-ink">
         @if ($image)
             <img src="{{ $image }}" alt="{{ $imageAlt }}" loading="lazy" decoding="async" class="size-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transition-none">
         @else
-            <div aria-hidden="true" class="grid size-full place-items-center bg-[repeating-linear-gradient(135deg,transparent_0_10px,rgb(255_48_79/0.1)_10px_11px)]">
-                <span class="font-mono text-xs tracking-[0.2em] text-accent">FC/{{ str_pad((string) ($project->sort_order + 1), 2, '0', STR_PAD_LEFT) }}</span>
+            <div class="fc-project-placeholder grid size-full place-items-center" role="img" aria-label="{{ __('Image de projet indisponible') }}">
+                <div class="relative z-10 grid gap-3 text-center">
+                    <span class="font-mono text-xs tracking-[0.2em] text-accent">FC/{{ str_pad((string) ($project->sort_order + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="font-display text-xl font-bold text-bone/80">{{ __('Aperçu bientôt disponible') }}</span>
+                </div>
             </div>
         @endif
     </div>
@@ -38,17 +41,15 @@
             <div class="mt-auto flex flex-wrap gap-3 pt-2">
                 @if ($project->repository_url)
                     <a href="{{ $project->repository_url }}" target="_blank" rel="noopener noreferrer" class="font-display font-semibold text-mist underline decoration-accent underline-offset-4 transition-colors hover:text-accent focus-visible:text-accent">
-                        {{ __('Voir le code') }} <span aria-hidden="true">↗</span>
+                        {{ __('Voir le code') }}
                     </a>
                 @endif
                 @if ($project->project_url)
                     <a href="{{ $project->project_url }}" target="_blank" rel="noopener noreferrer" class="font-display font-semibold text-mist underline decoration-accent underline-offset-4 transition-colors hover:text-accent focus-visible:text-accent">
-                        {{ __('Voir le site') }} <span aria-hidden="true">↗</span>
+                        {{ __('Voir le site') }}
                     </a>
                 @endif
             </div>
         @endif
     </div>
-
-    <span aria-hidden="true" class="pointer-events-none absolute inset-3 border border-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"></span>
 </article>

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class PublicSiteTest extends TestCase
@@ -25,7 +25,7 @@ class PublicSiteTest extends TestCase
         $cases = [];
 
         foreach (['fr', 'en'] as $locale) {
-            foreach (['', '/projects', '/about', '/experience', '/skills', '/education', '/resume', '/contact'] as $path) {
+            foreach (['', '/projects', '/resume', '/contact'] as $path) {
                 $cases["{$locale}{$path}"] = [$locale, $path];
             }
         }
@@ -49,7 +49,11 @@ class PublicSiteTest extends TestCase
     public function test_unsupported_language_is_not_found(): void
     {
         $this->get('/de')->assertNotFound();
+        $this->get('/fr/about')->assertNotFound();
         $this->get('/de/about')->assertNotFound();
+        $this->get('/fr/experience')->assertNotFound();
+        $this->get('/fr/skills')->assertNotFound();
+        $this->get('/fr/education')->assertNotFound();
     }
 
     public function test_home_page_is_translated(): void
@@ -73,7 +77,7 @@ class PublicSiteTest extends TestCase
 
     public function test_navigation_marks_the_current_page(): void
     {
-        $html = $this->get('/fr/about')->getContent();
+        $html = $this->get('/fr/resume')->getContent();
 
         // Une fois dans la navigation desktop, une fois dans le menu mobile.
         $this->assertSame(2, substr_count($html, 'aria-current="page"'));
@@ -81,8 +85,8 @@ class PublicSiteTest extends TestCase
 
     public function test_language_switcher_keeps_the_current_page(): void
     {
-        $this->get('/en/about')
-            ->assertSee('href="'.url('/fr/about').'"', false)
+        $this->get('/en/resume')
+            ->assertSee('href="'.url('/fr/resume').'"', false)
             ->assertSee('hreflang="fr"', false)
             ->assertSee('hreflang="en"', false);
     }
