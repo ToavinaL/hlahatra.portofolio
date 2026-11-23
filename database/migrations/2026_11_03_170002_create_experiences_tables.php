@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             // Entreprise ou contexte (freelance, projet personnel, etc.).
             $table->string('company')->nullable();
-            $table->date('started_on');
+            $table->date('started_on')->nullable();
             $table->date('ended_on')->nullable();
             $table->boolean('is_current')->default(false);
             $table->timestamps();

@@ -164,13 +164,13 @@ class ProjectModelTest extends TestCase
         $this->assertSame('Seconde', $second->altFor());
     }
 
-    public function test_initial_content_seeder_creates_the_draft_projects_of_the_specification(): void
+    public function test_initial_content_seeder_creates_all_projects_as_published(): void
     {
         $this->seed(InitialContentSeeder::class);
 
         $this->assertSame(8, Project::count());
         $this->assertSame(6, Category::count());
-        $this->assertSame(0, Project::published()->count());
+        $this->assertSame(8, Project::published()->count());
 
         foreach (Project::with('translations', 'technologies')->get() as $project) {
             $this->assertTrue($project->hasTranslation('fr'), $project->slug.' sans traduction française');
@@ -191,6 +191,16 @@ class ProjectModelTest extends TestCase
 
         $this->assertSame(8, Project::count());
         $this->assertSame(16, ProjectTranslation::count());
-        $this->assertSame(9, Technology::count());
+        $this->assertSame(11, Technology::count());
+    }
+
+    public function test_selected_projects_are_featured(): void
+    {
+        $this->seed(InitialContentSeeder::class);
+
+        $this->assertEqualsCanonicalizing(
+            ['mortal-kombat-madagascar', 'cleanlyst', 'plateforme-encheres', 'vente-infrastructures-reseau'],
+            Project::featured()->pluck('slug')->all()
+        );
     }
 }

@@ -29,10 +29,19 @@ class InitialContentSeeder extends Seeder
                 ['slug' => $data['slug']],
                 [
                     'category_id' => $categories[$data['category']]->id,
-                    'status' => ProjectStatus::Draft,
+                    'project_url' => $data['project_url'] ?? null,
+                    'status' => ProjectStatus::Published,
+                    'is_featured' => in_array($data['slug'], $this->featuredSlugs(), true),
                     'sort_order' => $order,
                 ],
             );
+
+            $project->update([
+                'category_id' => $categories[$data['category']]->id,
+                'project_url' => $data['project_url'] ?? $project->project_url,
+                'status' => ProjectStatus::Published,
+                'is_featured' => in_array($data['slug'], $this->featuredSlugs(), true),
+            ]);
 
             foreach (['fr', 'en'] as $locale) {
                 $project->translations()->firstOrCreate(
@@ -41,11 +50,9 @@ class InitialContentSeeder extends Seeder
                 );
             }
 
-            if ($project->wasRecentlyCreated) {
-                $project->technologies()->sync(
-                    collect($data['technologies'])->map(fn (string $name) => $technologies[$name]->id)
-                );
-            }
+            $project->technologies()->sync(
+                collect($data['technologies'])->map(fn (string $name) => $technologies[$name]->id)
+            );
         }
     }
 
@@ -81,7 +88,7 @@ class InitialContentSeeder extends Seeder
     {
         $technologies = [];
 
-        foreach (['Laravel', 'CodeIgniter 4', 'PHP 8', 'WordPress', 'Symfony 5', 'Symfony 3', 'Stripe', 'Mercure', 'start.gg'] as $order => $name) {
+        foreach (['Laravel', 'Fortify', 'Livewire', 'CodeIgniter 4', 'PHP 8', 'WordPress', 'Symfony 5', 'Symfony 3', 'Stripe', 'Mercure', 'start.gg'] as $order => $name) {
             $technologies[$name] = Technology::firstOrCreate(
                 ['slug' => Str::slug($name)],
                 ['name' => $name, 'sort_order' => $order],
@@ -97,13 +104,15 @@ class InitialContentSeeder extends Seeder
             [
                 'slug' => 'mortal-kombat-madagascar',
                 'category' => 'community-projects',
-                'technologies' => ['Laravel', 'start.gg'],
+                'project_url' => 'https://mortalkombatmadagascar.gamer.free/',
+                'technologies' => ['Laravel', 'Fortify', 'Livewire', 'start.gg'],
                 'fr' => ['title' => 'Mortal Kombat Madagascar', 'summary' => 'Plateforme communautaire e-sport : joueurs, tournois, classement et API start.gg.'],
                 'en' => ['title' => 'Mortal Kombat Madagascar', 'summary' => 'E-sports community platform: players, tournaments, rankings and the start.gg API.'],
             ],
             [
                 'slug' => 'cleanlyst',
                 'category' => 'management-platforms',
+                'project_url' => 'https://cleanlyst.42web.io/',
                 'technologies' => ['CodeIgniter 4'],
                 'fr' => ['title' => 'Cleanlyst', 'summary' => 'Plateforme de services avec administration et gestion des demandes.'],
                 'en' => ['title' => 'Cleanlyst', 'summary' => 'Services platform with an administration area and request management.'],
@@ -111,6 +120,7 @@ class InitialContentSeeder extends Seeder
             [
                 'slug' => 'edentalflow',
                 'category' => 'web-applications',
+                'project_url' => 'https://www.edentalflow.com',
                 'technologies' => ['PHP 8'],
                 'fr' => ['title' => 'Edentalflow', 'summary' => "Refonte d'une plateforme dédiée aux professionnels du secteur dentaire."],
                 'en' => ['title' => 'Edentalflow', 'summary' => 'Redesign of a platform dedicated to dental professionals.'],
@@ -118,6 +128,7 @@ class InitialContentSeeder extends Seeder
             [
                 'slug' => 'reseau-soa',
                 'category' => 'showcase-websites',
+                'project_url' => 'https://reseauoa.mg',
                 'technologies' => ['WordPress'],
                 'fr' => ['title' => 'Réseau Soa', 'summary' => "Site vitrine pour un syndicat d'organisations agricoles."],
                 'en' => ['title' => 'Réseau Soa', 'summary' => 'Showcase website for a union of agricultural organisations.'],
@@ -150,6 +161,17 @@ class InitialContentSeeder extends Seeder
                 'fr' => ['title' => 'Investissement immobilier en Corse', 'summary' => 'Maintenance et amélioration du frontend.'],
                 'en' => ['title' => 'Real estate investment in Corsica', 'summary' => 'Maintenance and improvement of the frontend.'],
             ],
+        ];
+    }
+
+    /** @return list<string> */
+    private function featuredSlugs(): array
+    {
+        return [
+            'mortal-kombat-madagascar',
+            'cleanlyst',
+            'plateforme-encheres',
+            'vente-infrastructures-reseau',
         ];
     }
 }

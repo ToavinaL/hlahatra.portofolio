@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\SetLocale;
+use App\Models\Experience;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/'.config('locales.default'));
@@ -32,9 +34,30 @@ Route::prefix('{locale}')
     ->where(['locale' => implode('|', config('locales.supported'))])
     ->middleware(SetLocale::class)
     ->group(function () {
-        Route::view('/', 'pages.home')->name('home');
+        Route::get('/', function () {
+            return view('pages.home', [
+                'experiences' => Experience::query()
+                    ->with(['translations', 'technologies'])
+                    ->latestFirst()
+                    ->get(),
+                'featuredProjects' => Project::query()
+                    ->with(['translations', 'technologies', 'images', 'category.translations'])
+                    ->published()
+                    ->featured()
+                    ->ordered()
+                    ->get(),
+            ]);
+        })->name('home');
 
-        Route::view('/projects', 'pages.stub', ['title' => 'Projets'])->name('projects.index');
+        Route::get('/projects', function () {
+            return view('pages.projects', [
+                'projects' => Project::query()
+                    ->with(['translations', 'technologies', 'images', 'category.translations'])
+                    ->published()
+                    ->ordered()
+                    ->get(),
+            ]);
+        })->name('projects.index');
         Route::view('/about', 'pages.stub', ['title' => 'À propos'])->name('about');
         Route::view('/experience', 'pages.stub', ['title' => 'Expérience'])->name('experience');
         Route::view('/skills', 'pages.stub', ['title' => 'Compétences'])->name('skills');
