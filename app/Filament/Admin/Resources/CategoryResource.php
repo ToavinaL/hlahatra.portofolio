@@ -16,7 +16,6 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -48,7 +47,7 @@ class CategoryResource extends Resource
                             ->maxLength(255),
                         TextInput::make('sort_order')
                             ->label('Ordre')
-                            ->numeric()
+                            ->integer()
                             ->default(0)
                             ->minValue(0),
                     ]),

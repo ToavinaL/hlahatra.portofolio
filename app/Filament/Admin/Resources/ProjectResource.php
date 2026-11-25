@@ -6,24 +6,23 @@ use App\Enums\Involvement;
 use App\Enums\ProjectStatus;
 use App\Filament\Admin\Resources\ProjectResource\Pages;
 use App\Models\Project;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -67,6 +66,12 @@ class ProjectResource extends Resource
                         ->image()
                         ->disk('public')
                         ->directory('projects/covers')
+                        ->visibility('public')
+                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                        ->maxSize(10240)
+                        ->previewable()
+                        ->downloadable()
+                        ->openable()
                         ->imageEditor(),
                 ]),
 
@@ -94,13 +99,14 @@ class ProjectResource extends Resource
                                 ->rows(3)
                                 ->maxLength(1000),
                             Textarea::make('description')
-                                ->rows(6),
+                                ->rows(6)
+                                ->maxLength(10000),
                             Grid::make(2)->schema([
-                                Textarea::make('context')->rows(4),
-                                Textarea::make('problem')->rows(4),
-                                Textarea::make('solution')->rows(4),
-                                Textarea::make('contributions')->rows(4),
-                                Textarea::make('features')->rows(4),
+                                Textarea::make('context')->rows(4)->maxLength(5000),
+                                Textarea::make('problem')->rows(4)->maxLength(5000),
+                                Textarea::make('solution')->rows(4)->maxLength(5000),
+                                Textarea::make('contributions')->rows(4)->maxLength(5000),
+                                Textarea::make('features')->rows(4)->maxLength(5000),
                                 TextInput::make('cover_alt')
                                     ->label('Texte alternatif de la couverture')
                                     ->maxLength(255),
@@ -139,7 +145,7 @@ class ProjectResource extends Resource
                         DatePicker::make('ended_on')->label('Fin'),
                         TextInput::make('project_url')->label('URL du projet')->url()->maxLength(255),
                         TextInput::make('repository_url')->label('URL du dépôt')->url()->maxLength(255),
-                        TextInput::make('sort_order')->numeric()->default(0)->minValue(0),
+                        TextInput::make('sort_order')->integer()->default(0)->minValue(0),
                         Toggle::make('is_featured')->label('Projet mis en avant'),
                         Toggle::make('is_ongoing')->label('Projet en cours'),
                     ]),
@@ -162,6 +168,12 @@ class ProjectResource extends Resource
                                 ->image()
                                 ->disk('public')
                                 ->directory('projects/gallery')
+                                ->visibility('public')
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                ->maxSize(10240)
+                                ->previewable()
+                                ->downloadable()
+                                ->openable()
                                 ->required(),
                             KeyValue::make('alt')
                                 ->label('Textes alternatifs')

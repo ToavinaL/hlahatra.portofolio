@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\SetLocale;
 use App\Models\Experience;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/'.config('locales.default'));
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 if (app()->isLocal()) {
     Route::view('/design-system', 'design-system');
@@ -50,16 +54,10 @@ Route::prefix('{locale}')
             ]);
         })->name('home');
 
-        Route::get('/projects', function () {
-            return view('pages.projects', [
-                'projects' => Project::query()
-                    ->with(['translations', 'technologies', 'images', 'category.translations'])
-                    ->published()
-                    ->ordered()
-                    ->get(),
-            ]);
-        })->name('projects.index');
+        Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+        Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
         Route::view('/resume', 'pages.resume')->name('resume');
+        Route::get('/resume/download', ResumeController::class)->name('resume.download');
         Route::get('/contact', [ContactController::class, 'create'])->name('contact');
         Route::post('/contact', [ContactController::class, 'store'])
             ->middleware('throttle:5,1')

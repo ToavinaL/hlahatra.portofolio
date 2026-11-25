@@ -9,8 +9,8 @@
     };
 @endphp
 
-<article class="fc-glow-card cut [--cut:0.9rem]">
-    <div class="fc-glow-card__content flex h-full flex-col gap-8 bg-ink/95 p-5 sm:p-7">
+<article class="fc-experience-card cut [--cut:0.9rem]">
+    <div class="flex h-full flex-col gap-8 bg-ink/95 p-5 sm:p-7">
         <header class="flex flex-col gap-5">
             <div>
                 <p class="fc-kicker">{{ $experience->company }}</p>

@@ -63,4 +63,29 @@ class ProjectsPageTest extends TestCase
             ->assertSee('target="_blank" rel="noopener noreferrer"', false)
             ->assertDontSee('Voir le code');
     }
+
+    public function test_project_detail_page_displays_the_project_content(): void
+    {
+        $this->get('/fr/projects/mortal-kombat-madagascar')
+            ->assertOk()
+            ->assertSee('Mortal Kombat Madagascar')
+            ->assertSee('Plateforme communautaire e-sport');
+    }
+
+    public function test_projects_can_be_filtered_by_technology(): void
+    {
+        $this->get('/fr/projects?technology=laravel')
+            ->assertOk()
+            ->assertSee('Mortal Kombat Madagascar')
+            ->assertDontSee('Cleanlyst');
+    }
+
+    public function test_sitemap_contains_localized_public_pages_and_projects(): void
+    {
+        $this->get('/sitemap.xml')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/xml')
+            ->assertSee('/fr/projects/mortal-kombat-madagascar', false)
+            ->assertSee('/en/resume', false);
+    }
 }

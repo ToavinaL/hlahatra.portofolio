@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -59,13 +61,15 @@ class PublicSiteTest extends TestCase
     public function test_home_page_is_translated(): void
     {
         $this->get('/fr')
-            ->assertSee('Développeur Web Full Stack')
+            ->assertSee('À propos de moi')
+            ->assertSee('Je construis des expériences web')
             ->assertSee('Voir les projets');
 
         $this->get('/en')
-            ->assertSee('Full Stack Web Developer')
+            ->assertSee('About me')
+            ->assertSee('I build web experiences that stand up to the real world.')
             ->assertSee('View projects')
-            ->assertDontSee('Développeur Web Full Stack');
+            ->assertDontSee('À propos de moi');
     }
 
     public function test_navigation_links_stay_in_the_current_language(): void
@@ -89,5 +93,16 @@ class PublicSiteTest extends TestCase
             ->assertSee('href="'.url('/fr/resume').'"', false)
             ->assertSee('hreflang="fr"', false)
             ->assertSee('hreflang="en"', false);
+    }
+
+    public function test_resume_pdf_can_be_downloaded_when_configured(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('resume/cv.pdf', '%PDF-1.4');
+        Setting::set('resume.path', 'resume/cv.pdf');
+
+        $this->get('/fr/resume/download')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf');
     }
 }

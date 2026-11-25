@@ -1,0 +1,1 @@
+var e=document.querySelectorAll(`[data-reveal]`);if(e.length&&!window.matchMedia(`(prefers-reduced-motion: reduce)`).matches){let t=new IntersectionObserver((e,t)=>{e.forEach(e=>{e.target.classList.toggle(`fc-visible`,e.isIntersecting)})},{threshold:.14});e.forEach(e=>t.observe(e))}
