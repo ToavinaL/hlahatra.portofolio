@@ -1,10 +1,18 @@
-@props(['title' => null])
+@props(['title' => null, 'description' => null, 'image' => null])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ? $title.' | '.config('app.name') : config('app.name') }}</title>
+    <meta name="description" content="{{ $description ?? __('Portfolio professionnel de Toavina Harentsoa, développeur web Full Stack.') }}">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $title ? $title.' | '.config('app.name') : config('app.name') }}">
+    <meta property="og:description" content="{{ $description ?? __('Portfolio professionnel de Toavina Harentsoa, développeur web Full Stack.') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @if ($image)<meta property="og:image" content="{{ $image }}">@endif
+    <link rel="sitemap" type="application/xml" href="{{ route('sitemap') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

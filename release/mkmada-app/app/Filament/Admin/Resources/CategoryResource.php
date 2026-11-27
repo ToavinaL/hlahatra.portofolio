@@ -47,7 +47,7 @@ class CategoryResource extends Resource
                             ->maxLength(255),
                         TextInput::make('sort_order')
                             ->label('Ordre')
-                            ->numeric()
+                            ->integer()
                             ->default(0)
                             ->minValue(0),
                     ]),

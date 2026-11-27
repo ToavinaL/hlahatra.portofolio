@@ -16,10 +16,12 @@ npm run build
 if ($LASTEXITCODE -ne 0) { Pop-Location; throw 'npm run build failed' }
 Pop-Location
 
-Write-Host '3/6 Copying application code and the complete vendor tree...'
-# Full paths in /XD on purpose: a bare name like "public" would also exclude app\Livewire\Public
+Write-Host '3/6 Copying application code...'
+# Full paths in /XD on purpose: a bare name like "public" would also exclude app\Livewire\Public.
+# Vendor dependencies are installed again in the release directory so that Composer
+# never ships an incomplete or environment-specific autoloader.
 robocopy $root $app /E `
-    /XD "$root\.git" "$root\node_modules" "$root\release" "$root\release-infinityfree" "$root\scratch" "$root\tests" "$root\public" "$root\.idea" "$root\.vscode" `
+    /XD "$root\.git" "$root\node_modules" "$root\vendor" "$root\release" "$root\release-infinityfree" "$root\scratch" "$root\tests" "$root\public" "$root\.idea" "$root\.vscode" `
     /XF .env phpunit.xml release-infinityfree.zip `
     /NFL /NDL /NJH /NJS /NP | Out-Null
 if ($LASTEXITCODE -ge 8) { throw 'robocopy (app) failed' }
@@ -43,10 +45,18 @@ foreach ($dir in 'storage\logs', 'storage\app', 'storage\framework\views', 'stor
     }
 }
 
-Write-Host '5/6 Refreshing the complete Composer autoloader...'
+Write-Host '5/6 Installing production Composer dependencies...'
 Push-Location $app
-composer dump-autoload --optimize --no-interaction --no-scripts
-if ($LASTEXITCODE -ne 0) { Pop-Location; throw 'composer dump-autoload failed' }
+composer install
+if ($LASTEXITCODE -ne 0) { Pop-Location; throw 'composer install failed' }
+if (-not (Test-Path -LiteralPath (Join-Path $app 'vendor\autoload.php') -PathType Leaf)) {
+    Pop-Location
+    throw 'Composer did not generate vendor/autoload.php.'
+}
+if (-not (Test-Path -LiteralPath (Join-Path $app 'vendor\composer\autoload_static.php') -PathType Leaf)) {
+    Pop-Location
+    throw 'Composer did not generate vendor/composer/autoload_static.php.'
+}
 Pop-Location
 
 Write-Host '6/6 Preparing public files...'

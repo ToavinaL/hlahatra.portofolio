@@ -29,6 +29,8 @@
 
         <p class="leading-relaxed text-mist">{{ $project->summary }}</p>
 
+        <a href="{{ route('projects.show', ['project' => $project]) }}" class="font-display font-semibold text-accent underline decoration-accent underline-offset-4">{{ __('Voir le projet') }}</a>
+
         @if ($project->technologies->isNotEmpty())
             <ul class="flex flex-wrap gap-2" aria-label="{{ __('Technologies utilisées') }}">
                 @foreach ($project->technologies as $technology)

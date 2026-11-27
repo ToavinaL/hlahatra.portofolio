@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Enums\Involvement;
 use App\Enums\ProjectStatus;
 use App\Filament\Admin\Resources\ProjectResource\Pages;
+use App\Models\Category;
 use App\Models\Project;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -27,6 +28,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProjectResource extends Resource
 {
@@ -57,7 +59,20 @@ class ProjectResource extends Resource
                             ->maxLength(255),
                         Select::make('category_id')
                             ->label('Catégorie')
-                            ->relationship('category', 'name')
+                            ->options(function (): array {
+                                /** @var Collection<int, Category> $categories */
+                                $categories = Category::query()
+                                    ->with('translations')
+                                    ->orderBy('sort_order')
+                                    ->get();
+                                $options = [];
+
+                                foreach ($categories as $category) {
+                                    $options[$category->getKey()] = $category->name ?? $category->slug;
+                                }
+
+                                return $options;
+                            })
                             ->searchable()
                             ->preload(),
                     ]),

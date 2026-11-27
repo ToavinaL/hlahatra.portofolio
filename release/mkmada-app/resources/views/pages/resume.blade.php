@@ -84,6 +84,9 @@
             <h1 class="mt-6 max-w-4xl font-display text-6xl font-bold leading-[0.82] tracking-tight sm:text-8xl">{{ __('Lahatra Fampiononana') }}<span class="text-accent">.</span></h1>
             <p class="mt-6 font-display text-2xl font-semibold text-accent sm:text-3xl">{{ __('Développeur Web Full Stack') }}</p>
             <p class="mt-8 max-w-2xl text-lg leading-relaxed text-mist sm:text-xl">{{ $profile }}</p>
+            @if (\App\Models\Setting::get('resume.path'))
+                <a href="{{ route('resume.download') }}" class="mt-8 inline-flex bg-accent px-6 py-3 font-display text-lg font-bold text-ink">{{ __('Télécharger le CV PDF') }}</a>
+            @endif
         </header>
 
         <section class="fc-section-reveal fc-motion-slide mt-20 grid gap-4 border-y border-white/10 py-8 sm:grid-cols-3 sm:gap-8" data-reveal aria-label="{{ __('Coordonnées') }}">
